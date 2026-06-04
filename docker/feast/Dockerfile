@@ -1,17 +1,13 @@
-FROM node:22-alpine
+FROM node:22-alpine as builder 
 
-WORKDIR /app
+WORKDIR /app    
 
 COPY package.json yarn.lock ./
 COPY apps/feast/package.json ./apps/feast/
 
-RUN yarn install
+RUN  rm -rf node_modules && yarn install
 
 COPY . .
-
-WORKDIR /app/apps/feast
-
-RUN yarn build
 
 EXPOSE 3000
 

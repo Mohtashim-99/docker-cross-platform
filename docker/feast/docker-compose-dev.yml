@@ -1,3 +1,6 @@
+volumes:
+  mysql_data: null
+  repo: null
 services:
   feast:
       image: remis_feast:dev
@@ -8,8 +11,8 @@ services:
         context: ../../
         dockerfile: ./docker/feast/Dockerfile
       volumes:
-        - ../../:/app
-        - /app/node_modules
+        - "repo:/app"
+        - "../../:/app"
       depends_on:
         - mysql
         - redis
@@ -36,7 +39,7 @@ services:
       MYSQL_ROOT_PASSWORD: "${DATABASE_PASSWORD:-feastpassword}"
       MYSQL_DATABASE: feast
     ports:
-      - "3307:3306"
+      - "3308:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
@@ -48,8 +51,6 @@ services:
       - "6379:6379"
     networks:
       - feast_dev
-volumes:
-  mysql_data:
 
 networks:
   feast_dev:
